@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-binance = "1.0.19"
+loguru = "*"
 
 [dev-packages]
 

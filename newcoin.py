@@ -1,6 +1,7 @@
 import argparse
 import time
 from datetime import datetime
+from loguru import logger
 
 from binance.client import Client
 
@@ -34,7 +35,6 @@ def create_market_order(symbol, quantity):
         type=Client.ORDER_TYPE_MARKET,
         quoteOrderQty=quantity
     )
-    print(trade_method)
     return order
 
 
@@ -48,7 +48,7 @@ def get_server_time():
 
 server_time_ms, local_time_ms = get_server_time()
 delay = local_time_ms - server_time_ms
-print(f"服务器延时: {delay} 毫秒")
+logger.info(f"服务器延时: {delay} 毫秒")
 
 # 转换下单时间为时间戳
 order_time = datetime.strptime(args.order_time, '%Y-%m-%d %H:%M:%S')
@@ -64,15 +64,15 @@ while True:
             while True:
                 try:
                     order = create_market_order(symbol, usdt_balance)
-                    print(f"下单结果: {order}")
-                    print(f"总计花费USDT: {usdt_balance}")
-                    print(f"下单时间: {datetime.now()}")
+                    logger.info(f"下单结果: {order}")
+                    logger.info(f"总计花费USDT: {usdt_balance}")
+                    logger.info(f"下单时间: {datetime.now()}")
                     break
                 except Exception as e:
-                    print(f"下单失败: {e}")
+                    logger.error(f"下单失败: {e}")
                     time.sleep(0.1)
             break
         else:
-            print("USDT余额不足")
+            logger.error("USDT余额不足")
             break
     time.sleep(0.001)  # 频繁检查时间，但避免过度占用CPU
