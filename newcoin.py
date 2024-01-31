@@ -54,14 +54,20 @@ logger.info(f"服务器延时: {delay} 毫秒")
 order_time = datetime.strptime(args.order_time, '%Y-%m-%d %H:%M:%S')
 order_timestamp = int(order_time.timestamp() * 1000)
 
+last_output_time = None
+
 # 等待到指定时间
 symbol = args.symbol + 'USDT'
 five_seconds_in_micro_seconds = 5 * 1000 * 1000
 while True:
     now = datetime.now()
-    delta = now - order_time
-    if delta.microseconds % five_seconds_in_micro_seconds == 0:
+    delta = order_time - now
+
+    # 检查是否需要输出剩余时间
+    if last_output_time is None or (now - last_output_time).total_seconds() >= 5:
         logger.info(f"等待下单时间剩余: {delta.seconds} 秒")
+        last_output_time = now  # 更新上次输出时间
+
     current_time_ms = int(time.time() * 1000)
     if (current_time_ms + delay) >= order_timestamp:
         usdt_balance = get_usdt_balance()
