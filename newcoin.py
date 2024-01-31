@@ -10,10 +10,12 @@ parser.add_argument('--api_key', type=str, required=True, help='Binance API密�
 parser.add_argument('--api_secret', type=str, required=True, help='Binance API密钥密文')
 parser.add_argument('--symbol', type=str, required=True, help='币种，例如BTC')
 parser.add_argument('--order_time', type=str, required=True, help='下单时间，格式为 YYYY-MM-DD HH:MM:SS')
+parser.add_argument('--api_server', type=str, required=False, default=Client.BASE_ENDPOINT_DEFAULT,
+                    help='下单时间，格式为 YYYY-MM-DD HH:MM:SS')
 parser.add_argument('--real', action='store_true', help='是否为真实交易，不设置此flag默认为测试单')
 args = parser.parse_args()
 
-client = Client(args.api_key, args.api_secret)
+client = Client(args.api_key, args.api_secret, base_endpoint=args.api_server)
 
 
 # 获取账户的USDT余额
