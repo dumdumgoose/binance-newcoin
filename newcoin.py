@@ -56,10 +56,11 @@ order_timestamp = int(order_time.timestamp() * 1000)
 
 # 等待到指定时间
 symbol = args.symbol + 'USDT'
+five_seconds_in_micro_seconds = 5 * 1000 * 1000
 while True:
     now = datetime.now()
     delta = now - order_time
-    if now.timestamp() % 5000 == 0:
+    if delta.microseconds % five_seconds_in_micro_seconds == 0:
         logger.info(f"等待下单时间剩余: {delta.seconds} 秒")
     current_time_ms = int(time.time() * 1000)
     if (current_time_ms + delay) >= order_timestamp:
