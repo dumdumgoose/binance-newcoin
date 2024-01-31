@@ -1,6 +1,6 @@
 import argparse
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from loguru import logger
 
 from binance.client import Client
@@ -57,6 +57,10 @@ order_timestamp = int(order_time.timestamp() * 1000)
 # 等待到指定时间
 symbol = args.symbol + 'USDT'
 while True:
+    delta = datetime.now() - order_time
+    delta_seconds = delta.seconds
+    if delta_seconds % 5 == 0:
+        logger.info(f"等待下单时间剩余: {delta_seconds} 秒")
     current_time_ms = int(time.time() * 1000)
     if (current_time_ms + delay) >= order_timestamp:
         usdt_balance = get_usdt_balance()
